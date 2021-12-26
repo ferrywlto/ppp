@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RunAOTCompilation>true</RunAOTCompilation>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,4 +13,5 @@
     <PackageReference Include="MudBlazor" Version="6.0.2" />
   </ItemGroup>
 
+  
 </Project>
