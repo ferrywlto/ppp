@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "blazor", "blazor", "{EFF545B8-BFBD-451F-B0F4-97C21810BE39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "blazor-server", "blazor\blazor-server\blazor-server.csproj", "{8307BB32-7960-4367-A960-E945D00A3C56}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "blazor-wasm", "blazor\blazor-wasm\blazor-wasm.csproj", "{23E62A99-DFCB-450B-BAB6-CBF1DD1C57B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", "{CA0D0E13-6FB2-4B33-86F8-BF42DCF6943E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "blazor-server", "blazor\blazor-server\blazor-server.csproj", "{5A393F85-4204-4103-8CF0-234819D049A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8307BB32-7960-4367-A960-E945D00A3C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8307BB32-7960-4367-A960-E945D00A3C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8307BB32-7960-4367-A960-E945D00A3C56}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8307BB32-7960-4367-A960-E945D00A3C56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{23E62A99-DFCB-450B-BAB6-CBF1DD1C57B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{23E62A99-DFCB-450B-BAB6-CBF1DD1C57B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23E62A99-DFCB-450B-BAB6-CBF1DD1C57B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -32,9 +28,13 @@ Global
 		{CA0D0E13-6FB2-4B33-86F8-BF42DCF6943E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA0D0E13-6FB2-4B33-86F8-BF42DCF6943E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA0D0E13-6FB2-4B33-86F8-BF42DCF6943E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A393F85-4204-4103-8CF0-234819D049A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A393F85-4204-4103-8CF0-234819D049A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A393F85-4204-4103-8CF0-234819D049A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A393F85-4204-4103-8CF0-234819D049A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8307BB32-7960-4367-A960-E945D00A3C56} = {EFF545B8-BFBD-451F-B0F4-97C21810BE39}
 		{23E62A99-DFCB-450B-BAB6-CBF1DD1C57B6} = {EFF545B8-BFBD-451F-B0F4-97C21810BE39}
+		{5A393F85-4204-4103-8CF0-234819D049A2} = {EFF545B8-BFBD-451F-B0F4-97C21810BE39}
 	EndGlobalSection
 EndGlobal
