@@ -1,6 +1,7 @@
 ﻿@page "/fetchdata"
 @using blazor_mix_ssr.Shared
-@inject HttpClient Http
+@inject IWeatherForecastService _weatherForecastService
+@inject IJSRuntime _js
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -42,6 +43,12 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+        forecasts = await _weatherForecastService.GetForecastAsync();
+    }
+
+    protected override async void OnAfterRender(bool firstRender) {
+        if (firstRender) {
+            await _js.InvokeVoidAsync("func1");
+        }
     }
 }

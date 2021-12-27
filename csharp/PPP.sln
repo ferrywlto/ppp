@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "blazor-server", "blazor\blazor-server\blazor-server.csproj", "{5A393F85-4204-4103-8CF0-234819D049A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "blazor_mix_ssr.Shared", "blazor\blazor_mix_ssr\Shared\blazor_mix_ssr.Shared.csproj", "{235F9799-7F73-4EDD-85E8-9C645A02C0D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "blazor_mix_ssr.Client", "blazor\blazor_mix_ssr\Client\blazor_mix_ssr.Client.csproj", "{EE1D4228-7F7C-4435-A370-CB8CE565D31E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "blazor_mix_ssr.Server", "blazor\blazor_mix_ssr\Server\blazor_mix_ssr.Server.csproj", "{19EAABE7-0DBF-41EF-A365-FECC8BC424CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +38,18 @@ Global
 		{5A393F85-4204-4103-8CF0-234819D049A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A393F85-4204-4103-8CF0-234819D049A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A393F85-4204-4103-8CF0-234819D049A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{235F9799-7F73-4EDD-85E8-9C645A02C0D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{235F9799-7F73-4EDD-85E8-9C645A02C0D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{235F9799-7F73-4EDD-85E8-9C645A02C0D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{235F9799-7F73-4EDD-85E8-9C645A02C0D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE1D4228-7F7C-4435-A370-CB8CE565D31E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE1D4228-7F7C-4435-A370-CB8CE565D31E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE1D4228-7F7C-4435-A370-CB8CE565D31E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE1D4228-7F7C-4435-A370-CB8CE565D31E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19EAABE7-0DBF-41EF-A365-FECC8BC424CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19EAABE7-0DBF-41EF-A365-FECC8BC424CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19EAABE7-0DBF-41EF-A365-FECC8BC424CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19EAABE7-0DBF-41EF-A365-FECC8BC424CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{23E62A99-DFCB-450B-BAB6-CBF1DD1C57B6} = {EFF545B8-BFBD-451F-B0F4-97C21810BE39}

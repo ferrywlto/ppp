@@ -1,9 +1,11 @@
+using blazor_mix_ssr.Server.Data;
+using blazor_mix_ssr.Shared;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 

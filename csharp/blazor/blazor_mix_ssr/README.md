@@ -7,8 +7,9 @@ Project created via
 dotnet new blazorwasm --hosted
 ```
 
-Reference: [Prerendering your Blazor WASM application with .NET 5 (part 1)](https://jonhilton.net/blazor-wasm-prerendering/)
-
+Reference: 
+- [Prerendering your Blazor WASM application with .NET 5 (part 1)](https://jonhilton.net/blazor-wasm-prerendering/)
+- [Prerendering your Blazor WASM application with .NET 5 (part 2 - solving the missing HttpClient problem)](https://jonhilton.net/blazor-wasm-prerendering-missing-http-client/)
 
 ### Serve the html from server side instead of static `index.html`
 
@@ -77,3 +78,141 @@ otherwise error show in console:
 ```c#
 Microsoft.JSInterop.JSException: Could not find any element matching selector ‘#app’.
 ```
+
+6. Solve client side dependency problem due to pre-rendering.
+   1. Create `Shared/IWeatherForecaseService.cs`
+   ```c#
+   namespace blazor_mix_ssr.Shared;
+   
+   public interface IWeatherForecastService {
+   Task<WeatherForecast[]> GetForecastAsync();
+   }
+   ```
+   2. Implement client side service: `Client/Data/WeatherForecastService.cs`
+   ```c#
+   using System.Net.Http.Json;
+   using blazor_mix_ssr.Shared;
+   
+   namespace blazor_mix_ssr.Client.Data;
+   
+   public class WeatherForecastService : IWeatherForecastService {
+   private readonly HttpClient _httpClient;
+   public WeatherForecastService(HttpClient httpClient) { _httpClient = httpClient; }
+   public async Task<WeatherForecast[]?> GetForecastAsync() {
+   return await _httpClient.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+   }
+   }
+   ```
+   3. Change `Client/Pages/FetchData.razor`:
+   add `@inject IWeatherForecastService _weatherForecastService` at the top of `Client/Pages/FetchData.razor`
+   
+   replace
+   ```c#
+   forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+   ```
+   with
+   ```c#
+   forecasts = await _weatherForecastService.GetForecastAsync();
+   ```
+
+## Configure WeatherForecastService for Client project
+### Add `WeatherForecastService` to DI in `Client/Program.cs`
+```c#
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
+await builder.Build().RunAsync();
+```
+
+7. Migrate `Server/Controller/WeatherForecastController.cs` logic to `Server/Data/WeatherForecastService.cs`:
+`WeatherForecastController.cs`
+```c#
+using Microsoft.AspNetCore.Mvc;
+using blazor_mix_ssr.Shared;
+
+namespace blazor_mix_ssr.Server.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class WeatherForecastController : ControllerBase
+{
+    private readonly IWeatherForecastService _weatherForecastService;
+
+    public WeatherForecastController(IWeatherForecastService weatherForecastService) {
+        _weatherForecastService = weatherForecastService;
+    }
+
+    [HttpGet]
+    public async Task<IEnumerable<WeatherForecast>?> Get() {
+        return await _weatherForecastService.GetForecastAsync();
+    }
+}
+
+```
+`WeatherForecastService.cs`
+```c#
+using blazor_mix_ssr.Shared;
+
+namespace blazor_mix_ssr.Server.Data;
+
+public class WeatherForecastService : IWeatherForecastService
+{
+    private static readonly string[] Summaries = {
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    };
+
+    public async Task<WeatherForecast[]?> GetForecastAsync()
+    {
+        var rng = new Random();
+        await Task.Delay(10);
+        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+                         {
+                             Date = DateTime.Now.AddDays(index),
+                             TemperatureC = rng.Next(-20, 55),
+                             Summary = Summaries[rng.Next(Summaries.Length)]
+                         })
+                         .ToArray();
+    }
+}
+
+```
+
+## Configure WeatherForecastService for Server project
+### Add `WeatherForecastService` to DI in `Server/Program.cs`
+```c#
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
+```
+
+# Prevent `OnInitialized(Async)` called twice.
+Pre-rendering on server will trigger `OnInitialized(Async)` once, then when browser received the whole HTML from server, `OnInitialized(Async)` will trigger again.
+
+It cannot use `OnAfterRender` like the way calling JS.
+
+The approach is to use cache (`IMemoryCache`) to return the same result so the data on page won't flicker/change during two loads.
+[Stateful reconnection after prerendering](https://docs.microsoft.com/en-us/aspnet/core/blazor/components/lifecycle?view=aspnetcore-6.0#stateful-reconnection-after-prerendering)
+
+
+# Execute JS from razor component.
+1. JS need to export or add to global function like:
+```js
+//in Server/Pages/_Host.html
+<script>
+    window.func1 = () => alert("Hello!");
+</script>
+```
+2. Inject `IJSRuntime` at the top of razor component:
+```c#
+// in Client/Pages/FetchData.razor
+@inject IJSRuntime _js
+```
+
+3. Only executable from `OnAfterRender` life-cycle hook:
+```c#
+// in Client/Pages/FetchData.razor
+ protected override async void OnAfterRender(bool firstRender) {
+     await _js.InvokeVoidAsync("func1");
+ }
+```
+if not limiting the function called only at the firstRender (i.e. pre-rending stage on server). The code will execute again when finished loading on browser.
