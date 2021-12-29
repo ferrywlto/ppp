@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using blazor_mix_ssr.Client;
 using blazor_mix_ssr.Client.Data;
 using blazor_mix_ssr.Shared;
+using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<HeadOutlet>("head::after");
@@ -14,4 +15,5 @@ builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>(
 
         return new WeatherForecastService(httpClient);
     });
+builder.Services.AddMudServices();
 await builder.Build().RunAsync();
