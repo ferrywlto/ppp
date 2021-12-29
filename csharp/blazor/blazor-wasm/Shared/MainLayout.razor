@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Reflection
+@inherits LayoutComponentBase
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -13,7 +14,7 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h6">test_mud</MudText>
+            <MudText Typo="Typo.h6">@Assembly.GetAssembly(typeof(App)).GetName()</MudText>
         </MudDrawerHeader>
         <NavMenu />
     </MudDrawer>
