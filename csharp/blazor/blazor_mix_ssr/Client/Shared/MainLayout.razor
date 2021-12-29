@@ -9,6 +9,17 @@
 <MudLayout>
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                @if (showAlert) {
+                    <MudAlert
+                        Severity="Severity.Warning"
+                        ContentAlignment="HorizontalAlignment.Center"
+                        Variant="Variant.Filled"
+                        ShowCloseIcon="true"
+                        Square="true"
+                        Dense="true"
+                        CloseIconClicked="() => showAlert = false"
+                    >The first rule of Fight Club is: you do not talk about Fight Club.</MudAlert>
+                }
         <MudSpacer />
         <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Link="https://mudblazor.com/" Target="_blank" />
         <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/Garderoben/MudBlazor" Target="_blank" />
@@ -27,10 +38,23 @@
 </MudLayout>
 
 @code {
+    bool showAlert = true;
     bool _drawerOpen = true;
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+    MudTheme CustomTheme() {
+        var theme = new MudTheme {
+            Palette = new Palette() {
+                Primary = "#0275d8",
+                Info = "#5bc0de",
+                Success = "#5cb85c",
+                Warning = "#f0ad4e",
+                Error = "#d9534f",
+            }
+        };
+        return theme;
     }
 }

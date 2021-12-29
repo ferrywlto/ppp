@@ -1,17 +1,28 @@
-﻿@page "/counter"
-
+﻿@page "/counter/{currentCount:int?}"
+@inject NavigationManager _navigationManager
 <PageTitle>Counter</PageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">Counter</MudText>
 <MudText Class="mb-4">Current count: @currentCount</MudText>
-<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="IncrementCount">Click me</MudButton>
-
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="IncrementCount">+1</MudButton>
+<MudButton Color="Color.Secondary" Variant="Variant.Filled" @onclick="GoToGFetchData">Fetch Data</MudButton>
+<MudButton Color="Color.Info" Variant="Variant.Filled" @onclick="AddTen">+10</MudButton>
 
 @code {
-    private int currentCount = 0;
+    [Parameter]
+    public int? currentCount { get; set; }
+
+    protected override void OnInitialized() { currentCount ??= 0; }
 
     private void IncrementCount()
     {
         currentCount++;
+    }
+
+    private void AddTen() {
+        _navigationManager.NavigateTo($"/counter/{currentCount+10}", replace: true, forceLoad: true);
+    }
+    private void GoToGFetchData() {
+        _navigationManager.NavigateTo("/fetchdata");
     }
 }
