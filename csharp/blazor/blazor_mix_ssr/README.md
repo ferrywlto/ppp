@@ -216,3 +216,90 @@ The approach is to use cache (`IMemoryCache`) to return the same result so the d
  }
 ```
 if not limiting the function called only at the firstRender (i.e. pre-rending stage on server). The code will execute again when finished loading on browser.
+
+# i18n
+## Use built-in culture-info and resource file approach
+- Translator must use Visual Studio or equivalent to contribute .resx
+- Bound to user browser/OS locale setting
+- ***Force page reload!!***
+- Support placeholder string
+- Also applies to date and currency format
+- Blazor WebAssembly I18n from Start to Finish (https://phrase.com/blog/posts/blazor-webassembly-i18n/)
+- ASP.NET Core Blazor globalization and localization (https://docs.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-6.0&pivots=server)
+- Localization in Blazor WebAssembly Applications (https://code-maze.com/localization-in-blazor-webassembly-applications/)
+
+## JavaScript way approach
+- [jsakamoto/Toolbelt.Blazor.I18nText](https://github.com/jsakamoto/Toolbelt.Blazor.I18nText)
+- JSON/CSV
+- No need reload page
+- Better intellisense support
+- Translation can be done by non-technical people.
+- Only simple text translation
+- No nesting hierarchy or plural support like vueI18n.
+
+# State Management
+
+## Passing data between pages and components
+
+### Cascading Parameters, Global, Top Down 
+### Parameter (Vue Prop), Top Down
+### EventCallback (Vue Event), Bottom Up
+### Inject State Container (Singleton/Transient) + Event Handler, Global
+1. App state has change event.
+2. App state property setter will invoke change event.
+3. Inject app state service as singleton on start.
+4. Inject app state object on component start.
+5. Component subscribe to app state change.
+6. When app state change, `StateHasChanged()` on each subscribed component will invoke. Causing re-render.
+
+References:
+- [Blazor Singleton Pass Data between Pages](https://wellsb.com/csharp/aspnet/blazor-singleton-pass-data-between-pages)
+- [3 Ways to Communicate Between Components in Blazor](https://chrissainty.com/3-ways-to-communicate-between-components-in-blazor)
+
+
+### Flux pattern, Global
+
+References:
+- [BlazorRealm](https://github.com/dworthen/BlazorRealm)
+[12] 2 years ago
+
+- [Cortex.Net](https://github.com/jspuij/Cortex.Net)
+[57] 9 months not updated
+
+- [Rudder](https://github.com/kjeske/rudder)
+[10] Almost deprecated, not updated for 3 years.
+ 
+- [Redux.NET](https://github.com/GuillaumeSalles/redux.NET)
+[694] Deprecated, no update for 5 years. 
+
+- [blazor-redux](https://github.com/torhovland/blazor-redux)
+[457] Almost deprecated, not updated for 3 years.
+
+- [BlazorState](https://github.com/BerserkerDotNet/BlazorState)
+[23] Didn't update for 6 months
+
+- [blazor-state](https://github.com/TimeWarpEngineering/blazor-state)
+[295] Still in active development, sister project of Fluxor
+
+- [Fluxor](https://github.com/mrpmorris/Fluxor)
+[545] Over-engineering, too complex compare to Vuex. In active development 
+
+- [Advanced Blazor State Management Using Fluxor Series' Articles](https://dev.to/mr_eking/series/11586)
+
+
+## Data Binding
+
+# Authentication & Authorization
+
+References:
+- [Authorization In Blazor WebAssembly](https://www.learmoreseekmore.com/2020/12/blazorwebassembly-authorization.html)
+- [Blazor WebAssembly - JWT Authentication Example & Tutorial](https://jasonwatmore.com/post/2020/08/13/blazor-webassembly-jwt-authentication-example-tutorial)
+- [ASP.NET Core Blazor authentication and authorization](https://docs.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-6.0#authentication)
+- [Secure ASP.NET Core Blazor WebAssembly](https://docs.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/?view=aspnetcore-6.0#authentication-process-with-oidc)
+- [ASP.NET Core Blazor WebAssembly additional security scenarios](https://docs.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/aodditional-scenarios?view=aspnetcore-6.0#attach-tokens-to-outgoing-requests)
+
+- [Blazor WebAssembly Authentication with ASP.NET Core Identity](https://code-maze.com/blazor-webassembly-authentication-aspnetcore-identity)
+- [Blazor WebAssembly Registration Functionality with ASP.NET Core Identity](https://code-maze.com/blazor-webassembly-registration-aspnetcore-identity)
+- [Blazor Components with Arbitrary and Cascading Parameters](https://code-maze.com/blazor-components)
+- [AuthenticationStateProvider in Blazor WebAssembly](https://code-maze.com/authenticationstateprovider-blazor-webassembly)
+- [Authentication in Blazor WebAssembly Hosted Applications](https://code-maze.com/authentication-in-blazor-webassembly-hosted-applications)
