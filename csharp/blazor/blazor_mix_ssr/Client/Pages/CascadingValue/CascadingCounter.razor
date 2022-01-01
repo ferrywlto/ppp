@@ -1,0 +1,24 @@
+@page "/cascading-value-counter"
+@using blazor_mix_ssr.Shared
+@inject InjectAppState _appState
+
+<PageTitle>Cascading Value Counter</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Cascading Value Counter</MudText>
+<MudText Class="mb-4">Current count: @_cascadedCount</MudText>
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="IncrementCount">+1</MudButton>
+
+@code {
+    /* Notice that update to _cascadedCount value will not modify the original Cascading Value,
+     * what modified in this component will stay in here and when page reload or route change,
+     * _cascadeCount will reset to the original Cascading Value.
+     */
+    [CascadingParameter(Name = "Counter")]
+    private int _cascadedCount { get; set; }
+    protected override async Task OnInitializedAsync() {
+        _cascadedCount += 1;
+        await Task.Delay(1000);
+    }
+
+    private void IncrementCount() { _cascadedCount += 1; }
+}
