@@ -1,0 +1,22 @@
+@page "/inject-appstate-counter"
+@using blazor_mix_ssr.Shared
+@inject InjectAppState _appState
+
+<PageTitle>Injected AppState Counter</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Injected AppState Counter</MudText>
+<MudText Class="mb-4">Current count: @_appState.CurrentCount</MudText>
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="IncrementCount">+1</MudButton>
+
+@code {
+    /* Notice that OnInitializedAsync will trigger twice. One on server and one on browser.
+     Unlike the StaticAppState version, the server side copy of InjectAppState.CurrentCount did not persist through
+     page reloads EXCEPT the injection mode is set to Singleton. Use AddScoped / AddTransient to avoid this.
+     */
+    protected override async Task OnInitializedAsync() {
+        _appState.CurrentCount += 1;
+        await Task.Delay(1000);
+    }
+
+    private void IncrementCount() { _appState.CurrentCount += 1; }
+}

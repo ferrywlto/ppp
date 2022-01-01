@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using blazor_mix_ssr.Client;
 using blazor_mix_ssr.Client.Data;
 using blazor_mix_ssr.Shared;
 using MudBlazor.Services;
@@ -15,5 +14,7 @@ builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>(
 
         return new WeatherForecastService(httpClient);
     });
+
+builder.Services.AddScoped<InjectAppState>();
 builder.Services.AddMudServices();
 await builder.Build().RunAsync();
