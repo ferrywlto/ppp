@@ -1,0 +1,20 @@
+@page "/static-appstate-counter"
+@using blazor_mix_ssr.Shared
+<PageTitle>Static AppState Counter</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Static AppState Counter</MudText>
+<MudText Class="mb-4">Current count: @StaticAppState.CurrentCount</MudText>
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="IncrementCount">+1</MudButton>
+
+@code {
+    /* Notice that OnInitializedAsync will trigger twice. One on server and one on browser.
+     The tricky part is there are also TWO copies of StaticAppState, when refreshing browser the server copy of StaticAppState
+     will keep increasing (e.g. 7) while the client will reset to 1 when loading complete (OnInitializedAsync triggered the second time).
+     */
+    protected override async Task OnInitializedAsync() {
+        StaticAppState.CurrentCount += 1;
+        await Task.Delay(1000);
+    }
+
+    private void IncrementCount() { StaticAppState.CurrentCount += 1; }
+}
