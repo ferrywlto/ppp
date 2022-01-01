@@ -256,6 +256,12 @@ References:
 - [Blazor Singleton Pass Data between Pages](https://wellsb.com/csharp/aspnet/blazor-singleton-pass-data-between-pages)
 - [3 Ways to Communicate Between Components in Blazor](https://chrissainty.com/3-ways-to-communicate-between-components-in-blazor)
 
+### Local & Session Storage, Global 
+- [ASP.NET Core Razor component lifecycle](https://docs.microsoft.com/en-gb/aspnet/core/blazor/components/lifecycle?view=aspnetcore-5.0#stateful-reconnection-after-prerendering)
+- Notice differences between `OnInitializedAsync()` and `OnAfterRenderAsync(bool firstRender)` especially for Blazor Server App and Blazor WASM Hosted App due to server pre-rendering
+- Prevent infinite loop by checking `firstRender` flag.
+- Learn how to deal with JavaScript code that is not possible to execute during server pre-rendering.
+
 
 ### Flux pattern, Global
 

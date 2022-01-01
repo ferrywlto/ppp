@@ -1,0 +1,46 @@
+@page "/browser-local-storage-counter"
+@using blazor_mix_ssr.Shared
+@inject InjectAppState _appState
+@inject IJSRuntime _js
+
+<PageTitle>@Title</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">@Title</MudText>
+<MudText Class="mb-4">Current count: @Count</MudText>
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="IncrementCount">+1</MudButton>
+
+@code {
+    private const string Title = "Browser Local Storage Counter";
+
+    private int Count { get; set; }
+
+    /* OnAfterRenderAsync used instead of OnInitializedAsync due to no JS execution available during server pre-rendering
+    for Blazor Server App / Blazor WASM Hosted App
+     */
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        Console.WriteLine($"BrowserLocalStorage - OnAfterRenderAsync : firstRender ? {firstRender}");
+
+        /* Since the page has already rendered, before loading value from browser storage it will be 0.
+         After loading values from browser storage, call StateHasChanged() to trigger a force re-render.
+         The firstRender condition guard ensure the re-render only happen once to prevents infinite loop.
+         */
+        if (firstRender) {
+            Count = await GetStorageValue();
+            StateHasChanged();
+        }
+    }
+
+    private async void IncrementCount() {
+        Count += 1;
+        await SetStorageValue(Count);
+    }
+
+    private async Task<int> GetStorageValue() {
+        var result = await _js.InvokeAsync<string>("localStorage.getItem", "count");
+        return string.IsNullOrEmpty(result) ? 0 : int.Parse(result);
+    }
+
+    private async Task SetStorageValue(int value) {
+        await _js.InvokeVoidAsync("localStorage.setItem", "count", value.ToString());
+    }
+}
