@@ -1,0 +1,9 @@
+@page "/event-counter"
+@inject NavigationManager _navigationManager
+<ChildCounter OnAddBtnClickCallback="handleChildOnClick" InnerCount="@_currentCount"/>
+
+@code {
+    private int _currentCount = 0;
+
+    private void handleChildOnClick() { _currentCount += 1; }
+}

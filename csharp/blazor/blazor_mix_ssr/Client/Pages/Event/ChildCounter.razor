@@ -1,0 +1,12 @@
+<MudText Typo="Typo.h3" GutterBottom="true">Counter</MudText>
+<MudText Class="mb-4">Current count: @InnerCount</MudText>
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="OnAddBtnClickCallback">+1</MudButton>
+
+@code {
+    [Parameter]
+    public int? InnerCount { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnAddBtnClickCallback { get; set; }
+    protected override void OnInitialized() { InnerCount ??= 0; }
+}
