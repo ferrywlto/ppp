@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using blazor_mix_ssr.Client.Data;
 using blazor_mix_ssr.Shared;
 using MudBlazor.Services;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<HeadOutlet>("head::after");
@@ -16,5 +17,6 @@ builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>(
     });
 
 builder.Services.AddScoped<InjectAppState>();
+builder.Services.AddI18nText();
 builder.Services.AddMudServices();
 await builder.Build().RunAsync();

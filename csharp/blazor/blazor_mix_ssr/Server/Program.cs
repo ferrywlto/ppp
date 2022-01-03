@@ -2,6 +2,7 @@ using blazor_mix_ssr.Server.Data;
 using blazor_mix_ssr.Shared;
 using Microsoft.AspNetCore.ResponseCompression;
 using MudBlazor.Services;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 builder.Services.AddScoped<InjectAppState>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddI18nText();
 builder.Services.AddMudServices();
 
 var app = builder.Build();

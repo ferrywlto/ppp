@@ -1,0 +1,26 @@
+@using System.Globalization
+@using blazor_mix_ssr.Shared
+
+<select onchange="@OnChange">
+    @foreach (var culture in CultureCollection.SupportedCultures) {
+        <option value="@culture.Name">@culture.DisplayName</option>
+    }
+</select>
+
+@code {
+
+    [Parameter]
+    public EventCallback<string> cb { get; set; }
+
+    private void OnChange(ChangeEventArgs e) {
+        if (e.Value is null)
+            return;
+
+        var selectedCulture = e.Value.ToString();
+
+        if (string.IsNullOrEmpty(selectedCulture)) return;
+
+        CultureCollection.PrintCultureInfo(new CultureInfo(selectedCulture));
+        cb.InvokeAsync(selectedCulture);
+    }
+}

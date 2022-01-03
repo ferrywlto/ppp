@@ -1,0 +1,45 @@
+@page "/i18n-counter"
+@using Toolbelt.Blazor.I18nText
+@using blazor_mix_ssr.Client.I18nText
+@inject I18nText _i18N
+@implements IDisposable
+<PageTitle>@Title</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">@Title</MudText>
+
+@if (_counterText is not null) {
+    <MudText Class="mb-4">@_counterText.Text1 @Count</MudText>
+}
+
+<MudButton OnClick="IncrementCount">+1</MudButton>
+<LocaleSelector cb="HandleLocaleChange"></LocaleSelector>
+
+@code {
+    private const string Title = "i18nText Counter";
+
+    private int Count { get; set; }
+
+    private void IncrementCount() {
+        Count += 1;
+    }
+
+    private Counter? _counterText;
+    protected override async Task OnInitializedAsync() {
+        _counterText = await _i18N.GetTextTableAsync<Counter>(this);
+        // Prevent memory leak
+        _i18N.ChangeLanguage -= OnLocaleChange;
+        _i18N.ChangeLanguage += OnLocaleChange;
+    }
+    protected override void OnAfterRender(bool firstRender) => Console.WriteLine("OnAfterRenderAsync");
+    private async Task HandleLocaleChange(string cultureName) { await ChangeLang(cultureName); }
+    private async Task ChangeLang(string language) => await _i18N.SetCurrentLanguageAsync(language);
+    private void OnLocaleChange(object? sender, I18nTextChangeLanguageEventArgs e) {
+        Console.WriteLine($"OnLocaleChange: {e.LanguageCode}");
+    }
+
+    // Prevent memory leak
+    public void Dispose() {
+        _i18N.ChangeLanguage -= OnLocaleChange;
+        _i18N?.Dispose();
+    }
+}

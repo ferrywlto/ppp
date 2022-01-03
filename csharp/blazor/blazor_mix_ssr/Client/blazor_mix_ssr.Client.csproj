@@ -10,10 +10,14 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
     <PackageReference Include="MudBlazor" Version="6.0.2" />
+    <PackageReference Include="Toolbelt.Blazor.I18nText" Version="11.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\blazor_mix_ssr.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="obj" />
+  </ItemGroup>
 </Project>
