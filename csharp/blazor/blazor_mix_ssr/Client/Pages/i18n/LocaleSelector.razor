@@ -20,7 +20,21 @@
 
         if (string.IsNullOrEmpty(selectedCulture)) return;
 
-        CultureCollection.PrintCultureInfo(new CultureInfo(selectedCulture));
+        var newCulture = new CultureInfo(selectedCulture);
+        CultureCollection.PrintCultureInfo(newCulture);
+
+        /*
+         * Setting CurrentUICulture and CurrentCulture will only temporary change the culture,
+         * On next render cycle (e.g. A button click causing state change and rerender will cause CurrentCulture
+         * and CurrentUICulture reset to DefaultThreadCurrentUICulture and DefaultThreadCurrentCulture respectively.
+         *
+         * Therefore setting DefaultThreadCurrentUICulture and DefaultThreadCurrentCulture is the correct way to
+         * preserve culture info across renders.
+         */
+//        CultureInfo.CurrentUICulture = newCulture;
+//        CultureInfo.CurrentCulture = newCulture;
+        CultureInfo.DefaultThreadCurrentUICulture = newCulture;
+        CultureInfo.DefaultThreadCurrentCulture = newCulture;
         cb.InvokeAsync(selectedCulture);
     }
 }

@@ -1,18 +1,28 @@
 @page "/i18n-counter"
 @using Toolbelt.Blazor.I18nText
 @using blazor_mix_ssr.Client.I18nText
+@using System.Globalization
 @inject I18nText _i18N
 @implements IDisposable
 <PageTitle>@Title</PageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">@Title</MudText>
+<LocaleSelector cb="HandleLocaleChange"></LocaleSelector>
+@* This entry is required in .csproj in order to render localized DateTime & Number string.
+<BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+
+Otherwise only fallback locale (default to 'en') format is supported.
+Changing locale to `zh-HK` will have no effects.
+*@
+<MudText Typo="Typo.h4" GutterBottom="true">ToString(): @DateTime.Now</MudText>
+<MudText Typo="Typo.h4" GutterBottom="true">Long Date: @DateTime.Now.ToLongDateString()</MudText>
+<MudText Typo="Typo.h4" GutterBottom="true">Long Time: @DateTime.Now.ToLongTimeString()</MudText>
 
 @if (_counterText is not null) {
     <MudText Class="mb-4">@_counterText.Text1 @Count</MudText>
 }
 
-<MudButton OnClick="IncrementCount">+1</MudButton>
-<LocaleSelector cb="HandleLocaleChange"></LocaleSelector>
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="IncrementCount">+1</MudButton>
 
 @code {
     private const string Title = "i18nText Counter";
@@ -30,7 +40,7 @@
         _i18N.ChangeLanguage -= OnLocaleChange;
         _i18N.ChangeLanguage += OnLocaleChange;
     }
-    protected override void OnAfterRender(bool firstRender) => Console.WriteLine("OnAfterRenderAsync");
+    protected override void OnAfterRender(bool firstRender) => Console.WriteLine($"OnAfterRenderAsync: locale: {CultureInfo.CurrentCulture.Name}");
     private async Task HandleLocaleChange(string cultureName) { await ChangeLang(cultureName); }
     private async Task ChangeLang(string language) => await _i18N.SetCurrentLanguageAsync(language);
     private void OnLocaleChange(object? sender, I18nTextChangeLanguageEventArgs e) {
