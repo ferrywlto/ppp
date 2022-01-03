@@ -224,9 +224,9 @@ if not limiting the function called only at the firstRender (i.e. pre-rending st
 - ***Force page reload!!***
 - Support placeholder string
 - Also applies to date and currency format
-- Blazor WebAssembly I18n from Start to Finish (https://phrase.com/blog/posts/blazor-webassembly-i18n/)
-- ASP.NET Core Blazor globalization and localization (https://docs.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-6.0&pivots=server)
-- Localization in Blazor WebAssembly Applications (https://code-maze.com/localization-in-blazor-webassembly-applications/)
+- [Blazor WebAssembly I18n from Start to Finish](https://phrase.com/blog/posts/blazor-webassembly-i18n/)
+- [ASP.NET Core Blazor globalization and localization](https://docs.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-6.0&pivots=server)
+- [Localization in Blazor WebAssembly Applications](https://code-maze.com/localization-in-blazor-webassembly-applications/)
 
 ## JavaScript way approach
 - [jsakamoto/Toolbelt.Blazor.I18nText](https://github.com/jsakamoto/Toolbelt.Blazor.I18nText)
