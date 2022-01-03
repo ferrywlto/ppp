@@ -222,8 +222,63 @@ if not limiting the function called only at the firstRender (i.e. pre-rending st
 - Translator must use Visual Studio or equivalent to contribute .resx
 - Bound to user browser/OS locale setting
 - ***Force page reload!!***
+  - `_nav.NavigateTo(_nav.Uri, true);`, also depends on read/write browser **localStorage**
 - Support placeholder string
 - Also applies to date and currency format
+
+- Tricky parts in order to work:
+  - `.csproj` file doesn't need strange `<ItemGroup>` entries still works.
+  - `*.Designer.cs` files generated when adding `.resx` file into project in IDE are not required. Those generated classes always has name clash with the component class that actually use the resource file.
+  - if you use default `builder.Services.AddLocalization();` then just place the resource files along with the class of them.
+  for example `Pages/Counter.razor` :
+```
+   Pages
+   |- Counter.razor
+   |- Counter.resx
+   |- Counter.zh.resx
+   |- Counter.zh-Hant-HK.resx
+```
+   - if you need to share resource files, you may have a `SharedResources` folder.
+     - Create a dummy class like this:
+```c#
+    namespace blazor_mix_ssr.Client.SharedResources;
+    public class SharedText {}
+```
+
+- Then you should have file structure like this:
+
+```c#
+    SharedResources
+    |- SharedText.cs
+    |- SharedText.en.resx
+    |- SharedText.ja-JP.resx
+```  
+- **[IMPORTANT]** The resource files naming rules:
+    
+    Given that you have `en-US`, `ja-JP`, `zh-Hant-HK` cultures.
+    The `.resx` file name **MUST** match the locale code **EXACTLY THE SAME**
+
+        - ✅ `Counter.en-US.resx`
+        - ❌ `Counter.en-us.resx`
+        - ✅ `Counter.ja-JP.resx`
+        - ❌ `Counter.ja-jp.resx`
+        - ✅ `Counter.en.resx`
+        - ✅ `SharedText.zh.resx`
+        - ✅ `SharedText.zh-Hant-HK.resx`
+        - ❌ `SharedText.zh-hant-HK.resx`
+        - ❌ `SharedText.zh-Hant-hk.resx`
+        - ❌ `SharedText.zh-hant-hk.resx`
+
+    - For Traditional Chinese, 
+        - use `zh-Hant-HK` instead of `zh-HK`
+        - use `zh-Hant-TW` instead of `zh-TW`
+
+### Tricks about `CurrentUICulture`, `CurrentCulture`, `DefaultThreadCurrentUICulture` and `DefaultThreadCurrentCulture`
+Setting CurrentUICulture and CurrentCulture will only temporary change the culture, On next render cycle (e.g. A button click causing state change and rerender will cause CurrentCulture and CurrentUICulture reset to DefaultThreadCurrentUICulture and DefaultThreadCurrentCulture respectively.
+ 
+Therefore setting DefaultThreadCurrentUICulture and DefaultThreadCurrentCulture is the correct way to preserve culture info across renders.
+
+References:
 - [Blazor WebAssembly I18n from Start to Finish](https://phrase.com/blog/posts/blazor-webassembly-i18n/)
 - [ASP.NET Core Blazor globalization and localization](https://docs.microsoft.com/en-us/aspnet/core/blazor/globalization-localization?view=aspnetcore-6.0&pivots=server)
 - [Localization in Blazor WebAssembly Applications](https://code-maze.com/localization-in-blazor-webassembly-applications/)

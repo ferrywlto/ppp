@@ -1,7 +1,10 @@
 @using System.Globalization
 @using blazor_mix_ssr.Shared
+@inject IJSRuntime _js
+@inject NavigationManager _nav
 
 <select onchange="@OnChange">
+    <option value=""></option>
     @foreach (var culture in CultureCollection.SupportedCultures) {
         <option value="@culture.Name">@culture.DisplayName</option>
     }
@@ -12,6 +15,12 @@
     [Parameter]
     public EventCallback<string> cb { get; set; }
 
+    [Parameter]
+    public bool? ResxRefresh { get; set; }
+
+    public LocaleSelector() {
+        ResxRefresh ??= false;
+    }
     private void OnChange(ChangeEventArgs e) {
         if (e.Value is null)
             return;
@@ -23,18 +32,23 @@
         var newCulture = new CultureInfo(selectedCulture);
         CultureCollection.PrintCultureInfo(newCulture);
 
-        /*
-         * Setting CurrentUICulture and CurrentCulture will only temporary change the culture,
-         * On next render cycle (e.g. A button click causing state change and rerender will cause CurrentCulture
-         * and CurrentUICulture reset to DefaultThreadCurrentUICulture and DefaultThreadCurrentCulture respectively.
-         *
-         * Therefore setting DefaultThreadCurrentUICulture and DefaultThreadCurrentCulture is the correct way to
-         * preserve culture info across renders.
-         */
-//        CultureInfo.CurrentUICulture = newCulture;
-//        CultureInfo.CurrentCulture = newCulture;
-        CultureInfo.DefaultThreadCurrentUICulture = newCulture;
-        CultureInfo.DefaultThreadCurrentCulture = newCulture;
-        cb.InvokeAsync(selectedCulture);
+        if (ResxRefresh!.Value is false) {
+            /*
+             * Setting CurrentUICulture and CurrentCulture will only temporary change the culture,
+             * On next render cycle (e.g. A button click causing state change and rerender will cause CurrentCulture
+             * and CurrentUICulture reset to DefaultThreadCurrentUICulture and DefaultThreadCurrentCulture respectively.
+             *
+             * Therefore setting DefaultThreadCurrentUICulture and DefaultThreadCurrentCulture is the correct way to
+             * preserve culture info across renders.
+             */
+            CultureInfo.DefaultThreadCurrentUICulture = newCulture;
+            CultureInfo.DefaultThreadCurrentCulture = newCulture;
+            cb.InvokeAsync(selectedCulture);
+        }
+        else {
+            Console.WriteLine($"OnChange - Refresh: {newCulture.Name}");
+            _js.InvokeVoidAsync("localStorage.setItem", "locale", newCulture.Name);
+            _nav.NavigateTo(_nav.Uri, true);
+        }
     }
 }

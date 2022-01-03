@@ -1,0 +1,32 @@
+@page "/resx-counter"
+@using System.Globalization
+@using blazor_mix_ssr.Client.Resources
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<ResxCounter> _localizer
+@inject IStringLocalizer<SharedResources> _localizer2
+<PageTitle>@Title</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">@Title</MudText>
+<LocaleSelector ResxRefresh="true"></LocaleSelector>
+
+<MudText Typo="Typo.h4" GutterBottom="true">ToString(): @DateTime.Now</MudText>
+<MudText Typo="Typo.h4" GutterBottom="true">Long Date: @DateTime.Now.ToLongDateString()</MudText>
+<MudText Typo="Typo.h4" GutterBottom="true">Long Time: @DateTime.Now.ToLongTimeString()</MudText>
+
+<MudText Class="mb-4">@GetLocalizedText() @Count</MudText>
+<MudText Class="mb-4">@GetSharedText() @Count</MudText>
+
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="IncrementCount">+1</MudButton>
+
+@code {
+    private const string Title = "Resx Counter";
+    private int Count { get; set; }
+    private string GetLocalizedText() { return _localizer["Text1"].Value; }
+    private string GetSharedText() { return _localizer2["Text1"].Value; }
+    private void IncrementCount() {
+        Count += 1;
+    }
+    protected override void OnAfterRender(bool firstRender) {
+        Console.WriteLine($"OnAfterRenderAsync: locale: {CultureInfo.CurrentCulture.Name}");
+    }
+}

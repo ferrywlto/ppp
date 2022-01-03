@@ -12,6 +12,7 @@ builder.Services.AddScoped<InjectAppState>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddI18nText();
+builder.Services.AddLocalization();
 builder.Services.AddMudServices();
 
 var app = builder.Build();
