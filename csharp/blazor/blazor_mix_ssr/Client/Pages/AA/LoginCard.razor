@@ -1,0 +1,30 @@
+@page "/login"
+@using blazor_mix_ssr.Shared
+@inject MyCustomAuthenticationStateProvider _authenticationStateProvider
+@inject NavigationManager _navigationManager
+@attribute [AllowAnonymous]
+
+<MudLayout Style="background-color: beige;">
+    <MudContainer MaxWidth="MaxWidth.Small" Style="height: 100vh;">
+        <MudCard Style="position: relative; top: 50%; transform: translateY(-50%);" Class="pb-3">
+            <MudCardContent>
+                <MudText Typo="Typo.h4" GutterBottom="true">PPP System</MudText>
+                <MudTextField @bind-Value="Username" Label="User" InputType="InputType.Text" Variant="Variant.Outlined"
+                              Class="pb-5"/>
+                <MudTextField @bind-Value="Password" Label="Password" InputType="InputType.Password" Variant="Variant.Outlined"/>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton FullWidth Variant="Variant.Filled" Color="Color.Primary" OnClick="OnLoginClicked">Login</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudContainer>
+</MudLayout>
+
+@code {
+    string Username { get; set; } = "hello";
+    string Password { get; set; } = "world";
+    private void OnLoginClicked(MouseEventArgs obj) {
+        _authenticationStateProvider.FakedSignIn();
+        _navigationManager.NavigateTo("/");
+    }
+}

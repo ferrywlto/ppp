@@ -1,16 +1,18 @@
-﻿@using MudBlazor
-@using System.Reflection
+﻿@using System.Reflection
+@using System.Security.Claims
 @inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider Theme="CustomTheme()" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<MudLayout>
-    <MudAppBar Elevation="0">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudIconButton Icon="@Icons.Material.Filled.AccessibleForward" Color="Color.Inherit" Edge="Edge.Start" />
-                @if (showAlert) {
+<AuthorizeView>
+    <Authorized>
+        <MudLayout>
+            <MudAppBar Elevation="0">
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
+                <MudIconButton Icon="@Icons.Material.Filled.AccessibleForward" Color="Color.Inherit" Edge="Edge.Start"/>
+                @if (_showAlert) {
                     <MudAlert
                         Severity="Severity.Warning"
                         ContentAlignment="HorizontalAlignment.Center"
@@ -18,30 +20,52 @@
                         ShowCloseIcon="true"
                         Square="true"
                         Dense="true"
-                        CloseIconClicked="() => showAlert = false"
-                    >The first rule of Fight Club is: you do not talk about Fight Club.</MudAlert>
+                        CloseIconClicked="() => _showAlert = false">The first rule of Fight Club is: you do not talk about Fight Club.</MudAlert>
                 }
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Link="https://mudblazor.com/" Target="_blank" />
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/Garderoben/MudBlazor" Target="_blank" />
-    </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h6">@Assembly.GetAssembly(typeof(App)).GetName()</MudText>
-        </MudDrawerHeader>
-        <NavMenu />
-    </MudDrawer>
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
-            @Body
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
+                <MudSpacer/>
+                <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Link="https://mudblazor.com/" Target="_blank"/>
+                <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/Garderoben/MudBlazor" Target="_blank"/>
+                @if (UserIsAuthenticated()) {
+                    <MudText>Hello @GetCurrentUserName()</MudText>
+                }
+            </MudAppBar>
+            <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
+                <MudDrawerHeader>
+                    <MudText Typo="Typo.h6">@Assembly.GetAssembly(typeof(App)).GetName()</MudText>
+                </MudDrawerHeader>
+                <NavMenu />
+            </MudDrawer>
+            <MudMainContent>
+                <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </MudLayout>
+    </Authorized>
+    <NotAuthorized>
+        @Body
+    </NotAuthorized>
+    <Authorizing>
+        @Body
+    </Authorizing>
+</AuthorizeView>
 
 @code {
-    bool showAlert = true;
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
+    bool _showAlert = true;
     bool _drawerOpen = true;
 
+    private bool UserIsAuthenticated() {
+        var result = AuthState.Result;
+        return result.User.Identity is {IsAuthenticated: true};
+    }
+
+    private string GetCurrentUserName() {
+        var nameClaim = AuthState.Result.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+        return nameClaim != null ? nameClaim.Value : "unknown user";
+    }
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;

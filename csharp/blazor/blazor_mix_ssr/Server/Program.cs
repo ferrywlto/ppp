@@ -1,5 +1,6 @@
 using blazor_mix_ssr.Server.Data;
 using blazor_mix_ssr.Shared;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.ResponseCompression;
 using MudBlazor.Services;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
@@ -9,6 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 builder.Services.AddScoped<InjectAppState>();
+builder.Services.AddScoped<MyCustomAuthenticationStateProvider>();
+/* THIS LINE IS FUCKING IMPORTANT!!!
+
+`builder.Services.AddScoped<AuthenticationStateProvider,DummyAuthenticationStateProvider>();`
+Will fail but
+`builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<DummyAuthenticationStateProvider>());`
+WORKS!!!
+
+ */
+builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<MyCustomAuthenticationStateProvider>());
+builder.Services.AddOptions();
+builder.Services.AddAuthorizationCore();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddI18nText();

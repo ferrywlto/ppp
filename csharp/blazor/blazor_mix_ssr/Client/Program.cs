@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using blazor_mix_ssr.Client.Data;
 using blazor_mix_ssr.Shared;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using MudBlazor.Services;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
@@ -19,6 +20,10 @@ builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>(
     });
 
 builder.Services.AddScoped<InjectAppState>();
+builder.Services.AddScoped<MyCustomAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<MyCustomAuthenticationStateProvider>());
+builder.Services.AddOptions();
+builder.Services.AddAuthorizationCore();
 builder.Services.AddI18nText();
 builder.Services.AddLocalization();
 builder.Services.AddMudServices();

@@ -357,7 +357,38 @@ References:
 
 # Authentication & Authorization
 
+## Tricks:
+1. You don't need to use `CascadingAuthenticationState` tag to work.
+2. You don't need to use `CascadingAuthenticationState` can still receive `Task<AuthenticationState>` CascadingParameter.
+3. You don't need to change default layout with code. Using one default layout in `AuthorizeRouteView` still sufficient.
+4. You don't need to call `StateHasChanged()` after updating authentication state.
+
+## Concepts:
+1. Subclassing `AuthenticationStateProvider` is mandatory except create project with built-in Authentication template.
+2. The built-in Authentication use traditional razor pages not Blazor. Force you to use EntityFrameworkCore, ASP.NET Core Identity and run on server.
+3. `GetAuthenticationStateAsync()` in subclass of `AuthenticationStateProvider` will be called upon page load if we add `builder.Services.AddAuthorizationCore();`
+4. In `AuthenticationStateProvider`:
+   1. Anonymous user = An empty `ClaimsPrincipal` with an empty `ClaimsIdentity` with empty or no `Claims` list.
+   2. Authenticated user = A `ClaimsPrincipal` with a `ClaimsIdentity` that with at least one `Claim` and any `authenticationType` value.
+   3. `NotifyAuthenticationStateChanged()` is the actual place to update user authentication status.
+5. `AuthorizeRouteView`, `AuthorizeView` and pages with `[Authorize]` attribute knows to update when `NotifyAuthenticationStateChanged()` called.
+
+## Important
+
+In `Program.cs`, when we need to inject dependency of our custom `AuthenticationStateProvider`,
+
+using the normal approach to get an object under an interface **WILL NOT WORK**!! 
+```c#
+builder.Services.AddScoped<AuthenticationStateProvider, MyCustomAuthenticationStateProvider>();
+```
+
+it have to write like this to inject our custom `AuthenticationStateProvider` whenever the app request a built-in default `AuthenticationStateProvider`.
+```c#
+builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<MyCustomAuthenticationStateProvider>());
+```
+   
 References:
+- **[Custom Authentication in Blazor WebAssembly – Detailed](https://codewithmukesh.com/blog/authentication-in-blazor-webassembly/)**
 - [Authorization In Blazor WebAssembly](https://www.learmoreseekmore.com/2020/12/blazorwebassembly-authorization.html)
 - [Blazor WebAssembly - JWT Authentication Example & Tutorial](https://jasonwatmore.com/post/2020/08/13/blazor-webassembly-jwt-authentication-example-tutorial)
 - [ASP.NET Core Blazor authentication and authorization](https://docs.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-6.0#authentication)
