@@ -124,6 +124,26 @@ System.TypeLoadException: Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.
 
    Question:
    - How to deal with MongoDB size expand in container?
+   - Problem:
+     - Deploying the container to GCP & Azure cannot get pass the installation status.
+     - I think it is the cache problem. In GCP, Cloud Run cannot restart container so when Grandnode finished install, its state presist as the container cannot restart. On the other hand if let container goes idle, the container get shutdown before the installation complete. In Azure App Service for Container, for unknown reason the install state still persists after app service restart.
+     - The code `Web/Grand.Web/Controllers/InstallController => Task<IActionResult> Index(InstallModel model)` should have the answer but I don't figure out yet.
+     - Grandnode2 can connect to MongoAltas via `mongodb+srv://<username>:<password>@sandbox-cluster.tzgum.gcp.mongodb.net/<database_name>?retryWrites=true&w=majority`
+
+
+   Tag grandnode image and push to public cloud
+  ```
+  // Azure
+  docker tag grandnode/grandnode2:1.1.x ferrywlto.azurecr.io/grandnode2
+  docker login ferrywlto.azurecr.io
+  docker push ferrywlto.azurecr.io/grandnode2
+
+  or
+   // GCP
+  docker tag grandnode/grandnode2:1.1.x asia.gcr.io/learn-ecommerce-337707/grandnode/grandnode2:1.1.x
+  gcloud auth login
+  docker push asia.gcr.io/learn-ecommerce-337707/grandnode/grandnode2:1.1.x
+  ```
 
    ### Prerequisite:
    1. Database for grandnode2 in MongoDB need to be created and exists before installation.
