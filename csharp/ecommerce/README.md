@@ -1,114 +1,84 @@
 # Compare eCommerce Platform
 
 Product                                                       | Stars ⭐ | Last Update 🕐 | .NET Version | Frontend  | Database                                | Notes |
--------------------------------------------------------------|---------|----------------|--------------|-----------|-----------------------------------------| ---
- [SimplCommerce](https://github.com/simplcommerce/SimplCommerce) | 3.5K    | 29 days        | 6            | Angular   | MSSQL, PostgreSQL, MySQL, SQLite        |
+-------------------------------------------------------------|----- ----|----------------|--------------|-----------|-----------------------------------------| ---
+ [SimplCommerce](https://github.com/simplcommerce/SimplCommerce) | 3.5K    | 29 days        | 6 (stable 3.1)           | Angular   | MSSQL, PostgreSQL, MySQL, SQLite        |
  [nopCommerce](https://github.com/nopSolutions/nopCommerce)      | 6.9K    | 9 days         | 5            | Unknown   | MSSQL, MySQL, PostgreSQL                | Most famous
  [GrandNode](https://github.com/grandnode/grandnode2)            | 1.8K    | 1 day          | 5            | Vue       | MongoDB, AWS DocumentDB, Azure CosmosDB | Built from nopCommerce, Vue & only NoSQL
 
 
-1. SimplCommerce
-   1. Clone form source
-   2. Not able to start by either follow the instructions on README nor by docker image
-   3. `dotnet ef database update` not working as the project not able to connect local SQL server, ignored connection string changes in `appsettings.json`
+## 1. SimplCommerce (GiveUp)
+- Has Stripe/Paypal Express built-in
+- Easier theming
+- Where is marketplace?
+- For a 3.5K project, the official site looks like halfly built.
+- Modern bootstrap/material style UI compare with other products.
+- Lack of documentation
+- The doc website didn't update for 2 years.
+- Still use no longer supported old Angular version. (1.x)
+- Seems like not in active development and is a dying project although it has simplier architecture.
+
+### Installation options
+1. Docker (Test only)
+- `docker run -p 5000:80 simplcommerce/ci-build`
+- default admin user and password: `admin@simplcommerce.com`, `1qazZAQ!`
+
+2. Clone form source
+   1. At root directory, `chmod 777 ./simpl-build.sh`
+   2. run `./simpl-build.sh`
+   3. Not able to start by either follow the instructions on README nor by docker image
+   4. `dotnet ef database update` not working as the project not able to connect local SQL server, ignored connection string changes in `appsettings.json`
+   5. The source code cannot compile out of the box, needed to install `Npgsql.EntityFrameworkCore.PostgreSQL` nuget package first.
+   6. The default connection string is for MSSQL, but the EF migration default to Postgres...
+   7. Initial run after successful build throws following exception.
 
 ```c#
-Unhandled exception. Microsoft.Data.SqlClient.SqlException (0x80131904): Login failed. The login is from an untrusted domain and cannot be used with Integrated authentication.
-   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
-   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
-   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
-   at Microsoft.Data.SqlClient.TdsParser.Run(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj)
-   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.CompleteLogin(Boolean enlistOK)
-   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean ignoreSniOpenTimeout, TimeoutTimer timeout, Boolean withFailover)
-   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
-   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
-   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool)
-   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
-   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
-   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
-   at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
-   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
-   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
-   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
-   at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
-   at Microsoft.Data.SqlClient.SqlConnection.Open()
-   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerConnection.OpenDbConnection(Boolean errorsExpected)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternal(Boolean errorsExpected)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.Open(Boolean errorsExpected)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
-   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
-   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__19_0(DbContext _, Enumerator enumerator)
-   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
-   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
-   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
-   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector)
-   at SimplCommerce.Module.Core.Extensions.EFConfigProvider.Load() in /Users/ferrywlto/Documents/dev/poc/ppp/csharp/ecommerce/simplCommerce/SimplCommerce/src/Modules/SimplCommerce.Module.Core/Extensions/EFConfigProvider.cs:line 24
-   at Microsoft.Extensions.Configuration.ConfigurationManager.AddSource(IConfigurationSource source)
-   at Microsoft.Extensions.Configuration.ConfigurationManager.Microsoft.Extensions.Configuration.IConfigurationBuilder.Add(IConfigurationSource source)
-   at SimplCommerce.Module.Core.Extensions.EFConfigurationProviderExtension.AddEntityFrameworkConfig(IConfigurationBuilder builder, Action`1 setup) in /Users/ferrywlto/Documents/dev/poc/ppp/csharp/ecommerce/simplCommerce/SimplCommerce/src/Modules/SimplCommerce.Module.Core/Extensions/EFConfigurationProviderExtension.cs:line 11
-   at Program.<<Main>$>g__ConfigureService|0_0(<>c__DisplayClass0_0& ) in /Users/ferrywlto/Documents/dev/poc/ppp/csharp/ecommerce/simplCommerce/SimplCommerce/src/SimplCommerce.WebHost/Program.cs:line 34
-   at Program.<Main>$(String[] args) in /Users/ferrywlto/Documents/dev/poc/ppp/csharp/ecommerce/simplCommerce/SimplCommerce/src/SimplCommerce.WebHost/Program.cs:line 26
-ClientConnectionId:4f663c92-6671-479f-8b4f-fadea2772ba9
-Error Number:18452,State:1,Class:14
+fail: Microsoft.EntityFrameworkCore.Database.Command[20102]
+      Failed executing DbCommand ...,
+fail: Microsoft.EntityFrameworkCore.Update[10000]
+      An exception occurred in the database while saving changes for context type 'SimplCommerce.Module.Core.Data.SimplDbContext'.
+      Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+       ---> System.InvalidCastException: Cannot write DateTimeOffset with Offset=08:00:00 to PostgreSQL type 'timestamp with time zone', only offset 0 (UTC) is supported. Note that it's not possible to mix DateTimes with different Kinds in an array/range. See the Npgsql.EnableLegacyTimestampBehavior AppContext switch to enable legacy behavior.
+...
+```
+
+3. From release package:
+- `simplcommerce_v1.0.0-rc-osx.10.13-x64.zip`
+- Latest stable release is still in .NETCore 2.1!
+- Not able to build using `./simpl-install.sh`. nor `dotnet build SimplCommerce.sln`
 
 ```
-2. nopCommerce
+SimplCommerce-1.0.0-rc/src/SimplCommerce.WebHost/SimplCommerce.WebHost.csproj(67,5): error MSB3073: The command "npm run gulp-copy-modules -- --configurationName Debug" exited with code 134.
+```
+
+
+## 2. nopCommerce
    1. Need register to download
-   2. Built package deploy only available for Windows and Linux, no MacOS.
-   3. Extract downloaded zip file
-   4. Open Presentation/Nop.Web project, restore and run.
-   5. Browse to localhost:5001 see installation page.
-   6. App terminated after installation, saying restart.
-   7. Execute `dotnet run` again then failed.
+   2. Have many language pack to download.
+   3. Have basic stripe plugin for free.
+   4. Have HKD currency by default.
+   5. Very good feature-wise.
+   6. Have document for basic customise layout.
+   7. Default look and feel is ugly.
+   8. Seems cloud deploy must rely on a VM with docker installed, which is the same as Grandnode2
 
-```c#
-Unhandled exception. System.Exception: Plugin 'Google Authenticator'. Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorListModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
-Return type in method 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorModel.<Clone>$()' on type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' is not compatible with base type method 'Nop.Web.Framework.Models.BaseNopEntityModel.<Clone>$()'.
-Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorSearchModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
+### Installation option
+   1. Built package deploy only available for Windows and Linux, no MacOS.
 
-Unable to load one or more of the requested types.
-Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorListModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
-Return type in method 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorModel.<Clone>$()' on type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' is not compatible with base type method 'Nop.Web.Framework.Models.BaseNopEntityModel.<Clone>$()'.
-Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorSearchModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
+`https://github.com/nopSolutions/nopCommerce/releases/tag/`
 
- ---> System.Exception: Plugin 'Google Authenticator'. Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorListModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
-Return type in method 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorModel.<Clone>$()' on type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' is not compatible with base type method 'Nop.Web.Framework.Models.BaseNopEntityModel.<Clone>$()'.
-Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorSearchModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
+   2. Docker Image:
 
- ---> System.Reflection.ReflectionTypeLoadException: Unable to load one or more of the requested types.
-Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorListModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
-Return type in method 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorModel.<Clone>$()' on type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' is not compatible with base type method 'Nop.Web.Framework.Models.BaseNopEntityModel.<Clone>$()'.
-Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorSearchModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
-   at System.Reflection.RuntimeModule.GetTypes(RuntimeModule module)
-   at System.Reflection.RuntimeModule.GetTypes()
-   at System.Reflection.Assembly.GetTypes()
-   at Nop.Web.Framework.Infrastructure.Extensions.ApplicationPartManagerExtensions.InitializePlugins(ApplicationPartManager applicationPartManager, AppSettings appSettings) in /Users/ferrywlto/Documents/dev/poc/ppp/csharp/ecommerce/nop/nopCommerce_4.40.4_Source/Presentation/Nop.Web.Framework/Infrastructure/Extensions/ApplicationPartManagerExtensions.cs:line 515
-System.TypeLoadException: Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorListModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
-System.TypeLoadException: Return type in method 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorModel.<Clone>$()' on type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' is not compatible with base type method 'Nop.Web.Framework.Models.BaseNopEntityModel.<Clone>$()'.
-System.TypeLoadException: Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator.Models.GoogleAuthenticatorSearchModel' from assembly 'Nop.Plugin.MultiFactorAuth.GoogleAuthenticator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
-   --- End of inner exception stack trace ---
-   at Nop.Web.Framework.Infrastructure.Extensions.ApplicationPartManagerExtensions.InitializePlugins(ApplicationPartManager applicationPartManager, AppSettings appSettings) in /Users/ferrywlto/Documents/dev/poc/ppp/csharp/ecommerce/nop/nopCommerce_4.40.4_Source/Presentation/Nop.Web.Framework/Infrastructure/Extensions/ApplicationPartManagerExtensions.cs:line 534
-   --- End of inner exception stack trace ---
-   at Nop.Web.Framework.Infrastructure.Extensions.ApplicationPartManagerExtensions.InitializePlugins(ApplicationPartManager applicationPartManager, AppSettings appSettings) in /Users/ferrywlto/Documents/dev/poc/ppp/csharp/ecommerce/nop/nopCommerce_4.40.4_Source/Presentation/Nop.Web.Framework/Infrastructure/Extensions/ApplicationPartManagerExtensions.cs:line 550
-   at Nop.Web.Framework.Infrastructure.Extensions.ServiceCollectionExtensions.ConfigureApplicationServices(IServiceCollection services, IConfiguration configuration, IWebHostEnvironment webHostEnvironment) in /Users/ferrywlto/Documents/dev/poc/ppp/csharp/ecommerce/nop/nopCommerce_4.40.4_Source/Presentation/Nop.Web.Framework/Infrastructure/Extensions/ServiceCollectionExtensions.cs:line 73
-   at Nop.Web.Startup.ConfigureServices(IServiceCollection services) in /Users/ferrywlto/Documents/dev/poc/ppp/csharp/ecommerce/nop/nopCommerce_4.40.4_Source/Presentation/Nop.Web/Startup.cs:line 37
-   at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
-   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
-   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.InvokeCore(Object instance, IServiceCollection services)
-   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass9_0.<Invoke>g__Startup|0(IServiceCollection serviceCollection)
-   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.Invoke(Object instance, IServiceCollection services)
-   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass8_0.<Build>b__0(IServiceCollection services)
-   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.UseStartup(Type startupType, HostBuilderContext context, IServiceCollection services, Object instance)
-   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.<>c__DisplayClass13_0.<UseStartup>b__0(HostBuilderContext context, IServiceCollection services)
-   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
-   at Microsoft.Extensions.Hosting.HostBuilder.Build()
-   at Nop.Web.Program.Main(String[] args) in /Users/ferrywlto/Documents/dev/poc/ppp/csharp/ecommerce/nop/nopCommerce_4.40.4_Source/Presentation/Nop.Web/Program.cs:line 16
-   at Nop.Web.Program.<Main>(String[] args)
+`docker pull nopcommerceteam/nopcommerce:latest`
 
-```
+   3. Clone from GitHub.
+
+`gh repo clone nopSolutions/nopCommerce`
+
+   1. Open Presentation/Nop.Web project, restore and run.
+   2. Browse to localhost:5001 see installation page.
+   3. App terminated after installation, saying restart.
+
 
 ## 3. GrandNode
 
@@ -121,6 +91,7 @@ System.TypeLoadException: Method '<Clone>$' in type 'Nop.Plugin.MultiFactorAuth.
    - Premium themes license are yearly based. Not much you can customize in admin page.
    - Anyway you can edit anything from source code and built your own version.
    - Should also support MongoAltas as it support other public cloud DB like Cosmos DB.
+   - No language pack by default, you have to translate by your own!
 
    Question:
    - How to deal with MongoDB size expand in container?

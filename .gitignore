@@ -769,3 +769,6 @@ local-*.sh
 .sln
 # exclude generated reference only default projects
 default 
+
+ecommerce
+!ecommerce/README.md
