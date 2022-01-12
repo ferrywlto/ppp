@@ -1,12 +1,19 @@
+# Practice direction
+
+1. Choose one product
+2. Create a site with it
+3. Try to replicate on other product
+4. Repeat step 3.
+
 # Comparison between CMS
 
-Product | Stars | Last Release      | .NET Version | Frontend       | Note
---- |-------|-------------------|--------------|----------------| --- 
-[Piranha](piranhacms.org) | 1.5K  | v10.0.1 - 01/12/21 | 6            | Vue            | Headless / Integrated CMS  
-[Squidex](squidex.io) | 1.6K  | v6.4.0 - 20/12/21 | 6            | N/A - Headless | Headless, MongoDb, Not free, starter plan limit to 20000 calls, powerful, many deploy options 
-[OrchardCore](www.orchardcore.net/) | 5.7K  | v1.2.0 - 07/01/22 | 6            | Liquid.js      | Framework + CMS, MSSQL, SQLite, Postgres, MySQL
-[Umbraco](mbraco.com) | 3.5K  | v9.2.0 - 04/01/22 | 6            | ?              | Headless is not free, Full CMS
-[MixCore](https://mixcore.org) | 435   | v1.0.4 - 11/11/21 | 5            | Angular/Svelte | Headless + Decoupled CMS
+Product | Stars | Last Release      | .NET Version | Frontend                                              | DB                                    | Note
+--- |-------|-------------------|--------------|-------------------------------------------------------|---------------------------------------| ---
+[Piranha](piranhacms.org) | 1.5K  | v10.0.1 - 01/12/21 | 6            | Vue                                                   | MSSQL, SQLite, Postgres, MySQL | Headless / Integrated CMS
+[Squidex](squidex.io) | 1.6K  | v6.4.0 - 20/12/21 | 6            | N/A - Headless                                        | MongoDb                               | Headless, Not free, starter plan limit to 20000 calls, powerful, many deploy options 
+[OrchardCore](www.orchardcore.net/) | 5.7K  | v1.2.0 - 07/01/22 | 6            | Liquid.js                                             | MSSQL, SQLite, Postgres, MySQL        | Framework + CMS                                             
+[Umbraco](mbraco.com) | 3.5K  | v9.2.0 - 04/01/22 | 6            | ?                                                     | ? | Headless is not free, Full CMS        
+[MixCore](https://mixcore.org) | 435   | v1.0.4 - 11/11/21 | 5            | Angular / Bootstrap / React / Vue / Svelte/ Handlebar | MSSQL, SQLite, Postgres, MySQL | Headless + Decoupled CMS                               
 
 Why CMS/Website over FB Page?
 - Data ownership
@@ -81,10 +88,44 @@ or
    `dotnet new occms`
     or
    `dotnet new ocmvc`
+
 ## 4. Umbraco
 
 ### Installation options
 
 ## 5. MixCore
+- Fast back office
+- Easy to use backoffice
+- Work out of box
+- Slow on data loading?
+- Good documentation
+- Good UX both front-end and back-office
+- Seems have some problems on back-office styling and permission settings
+
 
 ### Installation options
+
+1. Docker
+```
+docker pull mixcore/mix.core:latest
+docker run -it --rm -p 5000:80 --name mixcore_cms mixcore/mix.core:latest
+```
+
+2. By source
+
+`https://github.com/mixcore/mix.core/archive/refs/tags/v1.0.4.zip`
+
+```
+cd mix.core/src/Mix.Cms.Web
+
+dotnet restore
+dotnet build
+dotnet run
+```
+
+3. By upload binaries
+
+`https://github.com/mixcore/mix.core/releases/download/v1.0.4/mixcore-v1.0.4.zip`
+
+## 6. strapi (js)
+## 7. SiteCore (Enterprise level, not to touch)
