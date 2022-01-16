@@ -7,13 +7,13 @@
 
 # Comparison between CMS
 
-Product | Stars | Last Release      | .NET Version | Frontend                                              | DB                                    | Note
---- |-------|-------------------|--------------|-------------------------------------------------------|---------------------------------------| ---
-[Piranha](piranhacms.org) | 1.5K  | v10.0.1 - 01/12/21 | 6            | Vue                                                   | MSSQL, SQLite, Postgres, MySQL | Headless / Integrated CMS
-[Squidex](squidex.io) | 1.6K  | v6.4.0 - 20/12/21 | 6            | N/A - Headless                                        | MongoDb                               | Headless, Not free, starter plan limit to 20000 calls, powerful, many deploy options 
-[OrchardCore](www.orchardcore.net/) | 5.7K  | v1.2.0 - 07/01/22 | 6            | Liquid.js                                             | MSSQL, SQLite, Postgres, MySQL        | Framework + CMS                                             
-[Umbraco](mbraco.com) | 3.5K  | v9.2.0 - 04/01/22 | 6            | ?                                                     | ? | Headless is not free, Full CMS        
-[MixCore](https://mixcore.org) | 435   | v1.0.4 - 11/11/21 | 5            | Angular / Bootstrap / React / Vue / Svelte/ Handlebar | MSSQL, SQLite, Postgres, MySQL | Headless + Decoupled CMS                               
+Product | Stars | Last Release       | .NET Version | Frontend                                              | DB                               | Note
+--- |-------|--------------------|--------------|-------------------------------------------------------|----------------------------------| ---
+[Piranha](piranhacms.org) | 1.5K  | v10.0.1 - 01/12/21 | 6            | Vue                                                   | MSSQL, SQLite, Postgres, MySQL   | Headless / Integrated CMS
+[Squidex](squidex.io) | 1.6K  | v6.4.0 - 20/12/21  | 6            | N/A - Headless                                        | MongoDb                          | Headless, Not free, starter plan limit to 20000 calls, powerful, many deploy options 
+[OrchardCore](www.orchardcore.net/) | 5.7K  | v1.2.0 - 07/01/22  | 6            | Liquid.js                                             | MSSQL, SQLite, Postgres, MySQL   | Framework + CMS                                             
+[Umbraco](umbraco.com) | 3.5K  | v9.2.0 - 04/01/22  | 6            | Angular                                               | MSSQL                            | Headless is not free, Full CMS        
+[MixCore](https://mixcore.org) | 435   | v1.0.4 - 11/11/21  | 5            | Angular / Bootstrap / React / Vue / Svelte/ Handlebar | MSSQL, SQLite, Postgres, MySQL   | Headless + Decoupled CMS
 
 Why CMS/Website over FB Page?
 - Data ownership
@@ -62,8 +62,14 @@ or
 `~/manager` with `admin` / `password`
 
 ## 2. Squidex
+- Not easy to start / try. Seems force you to use their cloud hosting.
 
 ### Installation options
+`squidex/squidex:latest`
+
+- Need to build docker image from source.
+`https://github.com/Squidex/squidex/archive/refs/tags/6.4.0.zip`
+`https://github.com/Squidex/squidex/releases/download/6.4.0/binaries.zip`
 
 ## 3. OrchardCore
 
@@ -90,8 +96,38 @@ or
    `dotnet new ocmvc`
 
 ## 4. Umbraco
+- ASP.NET MVC
+- Backoffice use Angular
+- Can unattended install
+- SQL Server Only
+- Like Wordpress to try to provide low/no code platform to editor
+- Powerful, has many features that are not exist in other products like CRM forms, document and relation types.
+- Many packages to further extend features
+- Fast and responsive
+- For professional content site
+- Backoffice still partially work when server shut down.
+- Fast frontend
+- Have eCommerce concept implemented.
+- Coding template in backoffice interface
+- Work out of box, easy to install
+- Need to create database in MSSQL before install.
+- The down side: steep learning curve, too many features, MSSQL lock-in, no free headless mode.
 
 ### Installation options
+1. Template
+```
+dotnet new -i Umbraco.Templates
+dotnet new umbraco --name MyProject
+```
+
+2. Source
+
+`https://github.com/umbraco/Umbraco-CMS/archive/refs/tags/release-9.2.0.zip`
+```
+cd src/Umbraco.Web.UI
+dotnet run
+```
+
 
 ## 5. MixCore
 - Fast back office
@@ -126,6 +162,3 @@ dotnet run
 3. By upload binaries
 
 `https://github.com/mixcore/mix.core/releases/download/v1.0.4/mixcore-v1.0.4.zip`
-
-## 6. strapi (js)
-## 7. SiteCore (Enterprise level, not to touch)
